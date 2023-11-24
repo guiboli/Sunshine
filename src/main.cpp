@@ -369,6 +369,11 @@ launch_ui() {
   platf::open_url(url);
 }
 
+void
+launch_client() {
+  std::cout << "launch_client called"sv << std::endl;
+}
+
 /**
  * @brief Flush the log.
  *

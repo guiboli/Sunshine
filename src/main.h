@@ -42,7 +42,8 @@ std::uint16_t
 map_port(int port);
 void
 launch_ui();
-
+void
+launch_client();
 // namespaces
 namespace mail {
 #define MAIL(x)                         \

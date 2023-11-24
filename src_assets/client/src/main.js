@@ -1,11 +1,8 @@
-import shell from "shelljs";
 import log from "electron-log/main";
 import path from "path";
-const nodePath = shell.which("node").toString();
-console.log(`[app debug] ~ file: main.js:5 ~ nodePath:`, nodePath);
-shell.config.execPath = nodePath;
 
 const { app, BrowserWindow } = require("electron");
+const { exec, execSync } = require("node:child_process");
 
 const checkIsRunning = async (query) => {
   let platform = process.platform;
@@ -25,7 +22,7 @@ const checkIsRunning = async (query) => {
   }
 
   const p = new Promise((r, rj) => {
-    shell.exec(cmd, (code, stdout, stderr) => {
+    exec(cmd, (error, stdout, stderr) => {
       if (stderr != "") {
         r(false);
 
@@ -70,6 +67,7 @@ const createWindow = async () => {
       width: 800,
       height: 600,
       webPreferences: {
+        nodeIntegration: true,
         preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       },
     });
@@ -83,7 +81,7 @@ const createWindow = async () => {
     const isRunning = await checkIsRunning(`sunshine`);
     log.info(`[main] isRunning:`, isRunning);
     if (isRunning) {
-      const stdout = shell.exec(`pidof sunshine`).stdout;
+      const stdout = execSync(`pidof sunshine`).toString();
       if (stdout != null) {
         sunshinePid = stdout;
         log.info(`[main] sunshinePid:`, sunshinePid);
@@ -91,7 +89,7 @@ const createWindow = async () => {
     } else {
       const p = new Promise((r, rj) => {
         // launch sunshine
-        shell.exec(
+        exec(
           `sunshine 1> /tmp/sunshine_info.log 2> /tmp/sunshine_error.log &`,
           (code, stdout, stderr) => {
             r(code);
@@ -101,7 +99,7 @@ const createWindow = async () => {
               return;
             }
 
-            const pidofStdout = shell.exec(`pidof sunshine`).stdout;
+            const pidofStdout = execSync(`pidof sunshine`).toString();
             if (pidofStdout != null) {
               sunshinePid = pidofStdout;
               log.info(`[main] sunshinePid:`, sunshinePid);

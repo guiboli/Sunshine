@@ -2,6 +2,7 @@ import shell from "shelljs";
 import log from "electron-log/main";
 import path from "path";
 const nodePath = shell.which("node").toString();
+console.log(`[app debug] ~ file: main.js:5 ~ nodePath:`, nodePath);
 shell.config.execPath = nodePath;
 
 const { app, BrowserWindow } = require("electron");
@@ -90,22 +91,23 @@ const createWindow = async () => {
     } else {
       const p = new Promise((r, rj) => {
         // launch sunshine
-        const handler = shell.exec(
+        shell.exec(
           `sunshine 1> /tmp/sunshine_info.log 2> /tmp/sunshine_error.log &`,
-          { async: true }
-        );
-        handler.on(`exit`, (code) => {
-          r(code);
-        });
-        handler.on(`close`, (code) => {
-          r(code);
-        });
+          (code, stdout, stderr) => {
+            r(code);
+            if (stderr != "") {
+              log.error(`[main] launch Sunshine occurs error: `, stderr);
 
-        const stdout = shell.exec(`pidof sunshine`).stdout;
-        if (stdout != null) {
-          sunshinePid = stdout;
-          log.info(`[main] sunshinePid:`, sunshinePid);
-        }
+              return;
+            }
+
+            const pidofStdout = shell.exec(`pidof sunshine`).stdout;
+            if (pidofStdout != null) {
+              sunshinePid = pidofStdout;
+              log.info(`[main] sunshinePid:`, sunshinePid);
+            }
+          }
+        );
       });
 
       await p;

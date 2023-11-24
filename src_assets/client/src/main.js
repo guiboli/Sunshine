@@ -1,6 +1,58 @@
-const { app, BrowserWindow } = require("electron");
-const path = require("path");
+import shell from "shelljs";
+import log from "electron-log/main";
+import path from "path";
+const nodePath = shell.which("node").toString();
+shell.config.execPath = nodePath;
 
+const { app, BrowserWindow } = require("electron");
+
+const checkIsRunning = async (query) => {
+  let platform = process.platform;
+  let cmd = "";
+  switch (platform) {
+    case "win32":
+      cmd = `tasklist`;
+      break;
+    case "darwin":
+      cmd = `ps -ax | grep ${query}`;
+      break;
+    case "linux":
+      cmd = `ps -A`;
+      break;
+    default:
+      break;
+  }
+
+  const p = new Promise((r, rj) => {
+    shell.exec(cmd, (code, stdout, stderr) => {
+      if (stderr != "") {
+        r(false);
+
+        return;
+      }
+
+      if (stdout.toLowerCase().indexOf(query.toLowerCase()) > -1) {
+        r(true);
+
+        return;
+      }
+
+      r(false);
+    });
+  });
+
+  return await p;
+};
+
+const delay = async (duration) => {
+  return new Promise((r) => setTimeout(r, duration));
+};
+
+const checkIsDev = () => {
+  return process.env.NODE_ENV === "development";
+};
+
+log.initialize({ preload: true });
 app.commandLine.appendSwitch("ignore-certificate-errors");
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -8,22 +60,66 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
-const createWindow = () => {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-    },
-  });
+let sunshinePid = -1;
+const createWindow = async () => {
+  log.info(`[main] createWindow called`);
+  {
+    // Create the browser window.
+    const mainWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+      },
+    });
 
-  // and load the index.html of the app.
-  mainWindow.loadURL("https://0.0.0.0:47990");
-  mainWindow.removeMenu();
+    if (checkIsDev()) {
+      mainWindow.webContents.openDevTools();
+    } else {
+      mainWindow.removeMenu();
+    }
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+    const isRunning = await checkIsRunning(`sunshine`);
+    log.info(`[main] isRunning:`, isRunning);
+    if (isRunning) {
+      const stdout = shell.exec(`pidof sunshine`).stdout;
+      if (stdout != null) {
+        sunshinePid = stdout;
+        log.info(`[main] sunshinePid:`, sunshinePid);
+      }
+    } else {
+      const p = new Promise((r, rj) => {
+        // launch sunshine
+        const handler = shell.exec(
+          `sunshine 1> /tmp/sunshine_info.log 2> /tmp/sunshine_error.log &`,
+          { async: true }
+        );
+        handler.on(`exit`, (code) => {
+          r(code);
+        });
+        handler.on(`close`, (code) => {
+          r(code);
+        });
+
+        const stdout = shell.exec(`pidof sunshine`).stdout;
+        if (stdout != null) {
+          sunshinePid = stdout;
+          log.info(`[main] sunshinePid:`, sunshinePid);
+        }
+      });
+
+      await p;
+    }
+
+    await delay(5000);
+    const isStillRunning = await checkIsRunning(`sunshine`);
+    log.info(`[main] isStillRunning:`, isStillRunning);
+    if (isStillRunning) {
+      mainWindow.loadURL("https://0.0.0.0:47990");
+    } else {
+      mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+    }
+  }
 };
 
 // This method will be called when Electron has finished
@@ -37,6 +133,24 @@ app.on("ready", createWindow);
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
+  }
+});
+
+app.on("before-quit", () => {
+  log.info(`[main] before-quit called`);
+  if (sunshinePid !== -1) {
+    log.info(`[main] will kill Sunshine process: `, sunshinePid);
+    try {
+      const result = process.kill(sunshinePid);
+      if (!result) {
+        process.abort(sunshinePid);
+      }
+    } catch (err) {
+      log.error(`[main] kill Sunshine process occurs error: `, err);
+      process.abort(sunshinePid);
+    } finally {
+      log.info(`[main] kill Sunshine process done`);
+    }
   }
 });
 

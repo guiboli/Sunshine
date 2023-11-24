@@ -96,47 +96,47 @@ namespace confighttp {
 
   bool
   authenticate(resp_https_t response, req_https_t request) {
-    auto address = request->remote_endpoint().address().to_string();
-    auto ip_type = net::from_address(address);
+    // auto address = request->remote_endpoint().address().to_string();
+    // auto ip_type = net::from_address(address);
 
-    if (ip_type > http::origin_web_ui_allowed) {
-      BOOST_LOG(info) << "Web UI: ["sv << address << "] -- denied"sv;
-      response->write(SimpleWeb::StatusCode::client_error_forbidden);
-      return false;
-    }
+    // if (ip_type > http::origin_web_ui_allowed) {
+    //   BOOST_LOG(info) << "Web UI: ["sv << address << "] -- denied"sv;
+    //   response->write(SimpleWeb::StatusCode::client_error_forbidden);
+    //   return false;
+    // }
 
-    // If credentials are shown, redirect the user to a /welcome page
-    if (config::sunshine.username.empty()) {
-      send_redirect(response, request, "/welcome");
-      return false;
-    }
+    // // If credentials are shown, redirect the user to a /welcome page
+    // if (config::sunshine.username.empty()) {
+    //   send_redirect(response, request, "/welcome");
+    //   return false;
+    // }
 
-    auto fg = util::fail_guard([&]() {
-      send_unauthorized(response, request);
-    });
+    // auto fg = util::fail_guard([&]() {
+    //   send_unauthorized(response, request);
+    // });
 
-    auto auth = request->header.find("authorization");
-    if (auth == request->header.end()) {
-      return false;
-    }
+    // auto auth = request->header.find("authorization");
+    // if (auth == request->header.end()) {
+    //   return false;
+    // }
 
-    auto &rawAuth = auth->second;
-    auto authData = SimpleWeb::Crypto::Base64::decode(rawAuth.substr("Basic "sv.length()));
+    // auto &rawAuth = auth->second;
+    // auto authData = SimpleWeb::Crypto::Base64::decode(rawAuth.substr("Basic "sv.length()));
 
-    int index = authData.find(':');
-    if (index >= authData.size() - 1) {
-      return false;
-    }
+    // int index = authData.find(':');
+    // if (index >= authData.size() - 1) {
+    //   return false;
+    // }
 
-    auto username = authData.substr(0, index);
-    auto password = authData.substr(index + 1);
-    auto hash = util::hex(crypto::hash(password + config::sunshine.salt)).to_string();
+    // auto username = authData.substr(0, index);
+    // auto password = authData.substr(index + 1);
+    // auto hash = util::hex(crypto::hash(password + config::sunshine.salt)).to_string();
 
-    if (!boost::iequals(username, config::sunshine.username) || hash != config::sunshine.password) {
-      return false;
-    }
+    // if (!boost::iequals(username, config::sunshine.username) || hash != config::sunshine.password) {
+    //   return false;
+    // }
 
-    fg.disable();
+    // fg.disable();
     return true;
   }
 

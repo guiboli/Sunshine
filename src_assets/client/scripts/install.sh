@@ -17,7 +17,7 @@ then
   exit 1
 fi
 
-sudo apt install -f $SUNSHINE_DEB
+sudo sudo dpkg --force-confold -i $SUNSHINE_DEB
 echo "install $SUNSHINE_DEB done"
-sudo apt install -f $CLIENT_DEB
+sudo sudo dpkg --force-confold -i $CLIENT_DEB
 echo "install $CLIENT_DEB done"

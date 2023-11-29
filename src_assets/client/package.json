@@ -31,7 +31,8 @@
     "electron": "27.1.0",
     "node-loader": "^2.0.0",
     "shelljs": "^0.8.5",
-    "style-loader": "^3.3.3"
+    "style-loader": "^3.3.3",
+    "worker-loader": "^3.0.8"
   },
   "dependencies": {
     "electron-log": "^5.0.1",

@@ -3,52 +3,9 @@ import path from "path";
 
 const { app, BrowserWindow } = require("electron");
 const { exec, execSync } = require("node:child_process");
-
-const checkIsRunning = async (query) => {
-  let platform = process.platform;
-  let cmd = "";
-  switch (platform) {
-    case "win32":
-      cmd = `tasklist`;
-      break;
-    case "darwin":
-      cmd = `ps -ax | grep ${query}`;
-      break;
-    case "linux":
-      cmd = `ps -A`;
-      break;
-    default:
-      break;
-  }
-
-  const p = new Promise((r, rj) => {
-    exec(cmd, (error, stdout, stderr) => {
-      if (stderr != "") {
-        r(false);
-
-        return;
-      }
-
-      if (stdout.toLowerCase().indexOf(query.toLowerCase()) > -1) {
-        r(true);
-
-        return;
-      }
-
-      r(false);
-    });
-  });
-
-  return await p;
-};
-
-const delay = async (duration) => {
-  return new Promise((r) => setTimeout(r, duration));
-};
-
-const checkIsDev = () => {
-  return process.env.NODE_ENV === "development";
-};
+const { checkIsRunning, checkIsDev, delay } = require("./main/utils");
+const { EventNamesMap } = require("./constants/constant");
+import { Worker } from "worker_threads";
 
 log.initialize({ preload: true });
 app.commandLine.appendSwitch("ignore-certificate-errors");
@@ -68,6 +25,7 @@ const createWindow = async () => {
       height: 600,
       webPreferences: {
         nodeIntegration: true,
+        nodeIntegrationInWorker: true,
         preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       },
     });
@@ -116,6 +74,25 @@ const createWindow = async () => {
     log.info(`[main] isStillRunning:`, isStillRunning);
     if (isStillRunning) {
       mainWindow.loadURL("https://0.0.0.0:47990");
+
+      {
+        const worker = new Worker(
+          new URL("./workers/main/sunshineChecker.js", import.meta.url)
+        );
+        worker.on("message", (message) => {
+          if (message === EventNamesMap.SUNSHINE_KILLED) {
+            mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+          }
+        });
+
+        worker.on("error", (error) => {
+          log.error(`[sunshineChecker] error in worker thread: ${error}`);
+        });
+
+        worker.on("exit", (code) => {
+          log.info(`[sunshineChecker] worker thread exited with code: ${code}`);
+        });
+      }
     } else {
       mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
     }

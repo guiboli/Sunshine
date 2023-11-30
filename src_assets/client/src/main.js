@@ -4,7 +4,7 @@ import path from "path";
 const { app, BrowserWindow } = require("electron");
 const { exec, execSync } = require("node:child_process");
 const { checkIsRunning, checkIsDev, delay } = require("./main/utils");
-const { EventNamesMap } = require("./constants/constant");
+const { EventNamesMap, SunshineHttpAddress } = require("./constants/constant");
 import { Worker } from "worker_threads";
 
 let mainWindow = null;
@@ -79,12 +79,8 @@ const createWindow = async () => {
       await p;
     }
 
-    await delay(5000);
-    const isStillRunning = await checkIsRunning(`sunshine`);
-    log.info(`[main] isStillRunning:`, isStillRunning);
-    if (isStillRunning) {
-      mainWindow.loadURL("https://0.0.0.0:47990");
-
+    {
+      mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
       {
         const worker = new Worker(
           new URL("./workers/main/sunshineChecker.js", import.meta.url)
@@ -92,6 +88,9 @@ const createWindow = async () => {
         worker.on("message", (message) => {
           if (message === EventNamesMap.SUNSHINE_KILLED) {
             mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+          }
+          if (message === EventNamesMap.SUNSHINE_READY) {
+            mainWindow.loadURL(SunshineHttpAddress);
           }
         });
 
@@ -103,8 +102,6 @@ const createWindow = async () => {
           log.info(`[sunshineChecker] worker thread exited with code: ${code}`);
         });
       }
-    } else {
-      mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
     }
   }
 };

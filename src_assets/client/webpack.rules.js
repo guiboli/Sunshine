@@ -1,11 +1,21 @@
 module.exports = [
   {
-    test: /\.worker\.js$/i,
-    loader: "worker-loader",
-    options: {
-      esModule: false,
+    test: /\.jsx?$/,
+    use: {
+      loader: "babel-loader",
+      options: {
+        exclude: /node_modules/,
+        presets: ["@babel/preset-react"],
+      },
     },
   },
+  // {
+  //   test: /\.worker\.js$/i,
+  //   loader: "worker-loader",
+  //   options: {
+  //     esModule: false,
+  //   },
+  // },
   // Add support for native node modules
   {
     // We're specifying native_modules in the test because the asset relocator loader generates a

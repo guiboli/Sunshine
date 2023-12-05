@@ -1,6 +1,7 @@
 const { exec } = require("node:child_process");
 const http = require("http");
 const https = require("https");
+const path = require("path");
 
 const checkIsRunning = async (query) => {
   let platform = process.platform;
@@ -81,9 +82,14 @@ const checkIsHttpServiceAlive = async (
   return await p;
 };
 
+const loadURL = (win, entry, path) => {
+  win.loadURL(`${entry}/#${path}`);
+};
+
 module.exports = {
   checkIsRunning,
   checkIsDev,
   delay,
   checkIsHttpServiceAlive,
+  loadURL,
 };

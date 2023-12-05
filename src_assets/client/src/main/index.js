@@ -3,7 +3,7 @@ import path from "path";
 
 const { app, BrowserWindow } = require("electron");
 const { exec, execSync } = require("node:child_process");
-const { checkIsRunning, checkIsDev, delay } = require("./utils/utils");
+const { checkIsRunning, checkIsDev, delay, loadURL } = require("./utils/utils");
 const { EventNamesMap, SunshineHttpAddress } = require("./constants/constant");
 import { Worker } from "worker_threads";
 
@@ -80,14 +80,15 @@ const createWindow = async () => {
     }
 
     {
-      mainWindow.loadURL(`${MAIN_WINDOW_WEBPACK_ENTRY}/loading`);
+      loadURL(mainWindow, MAIN_WINDOW_WEBPACK_ENTRY, "loading");
+
       {
         const worker = new Worker(
           new URL("./workers/sunshineChecker.js", import.meta.url)
         );
         worker.on("message", (message) => {
           if (message === EventNamesMap.SUNSHINE_KILLED) {
-            mainWindow.loadURL(`${MAIN_WINDOW_WEBPACK_ENTRY}/error`);
+            loadURL(mainWindow, MAIN_WINDOW_WEBPACK_ENTRY, "error");
           }
           if (message === EventNamesMap.SUNSHINE_READY) {
             mainWindow.loadURL(SunshineHttpAddress);

@@ -1,12 +1,13 @@
-import { MemoryRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import React from "react";
 import { MyRoutes } from "./routes";
 
 const MyRouter = () => {
+  const pathname = window.location.pathname;
   return (
-    <MemoryRouter basename="/main_window" initialEntries={["/main_window"]}>
+    <HashRouter>
       <MyRoutes></MyRoutes>
-    </MemoryRouter>
+    </HashRouter>
   );
 };
 

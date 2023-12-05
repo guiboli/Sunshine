@@ -81,6 +81,7 @@ const createWindow = async () => {
 
     {
       loadURL(mainWindow, MAIN_WINDOW_WEBPACK_ENTRY, "loading");
+      log.info(`MAIN_WINDOW_WEBPACK_ENTRY: `, MAIN_WINDOW_WEBPACK_ENTRY);
 
       {
         const worker = new Worker(

@@ -83,7 +83,7 @@ const checkIsHttpServiceAlive = async (
 };
 
 const loadURL = (win, entry, path) => {
-  win.loadURL(`${entry}/#${path}`);
+  win.loadURL(`${entry}#${path}`);
 };
 
 module.exports = {

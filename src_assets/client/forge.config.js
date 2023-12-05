@@ -36,6 +36,10 @@ module.exports = {
       config: {
         port: 47991,
         mainConfig: "./webpack.main.config.js",
+        devServer: {
+          historyApiFallback: true,
+          hot: true,
+        },
         renderer: {
           config: "./webpack.renderer.config.js",
           entryPoints: [

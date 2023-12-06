@@ -44,7 +44,8 @@ namespace system_tray {
   void
   tray_open_ui_cb(struct tray_menu *item) {
     BOOST_LOG(info) << "Opening UI from system tray"sv;
-    launch_ui();
+    // launch_ui();
+    launch_client();
   }
 
   /**

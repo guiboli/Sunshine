@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "checkJs": true,
+    "module": "es6",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "jsx": "react",
+    "paths": {
+      "~/*": ["src/*"],
+    }
+  },
+  "exclude": ["node_modules/**/*", "dist/**/*", ".vscode", "build", "tmp"],
+  "include": ["src/**/*"]
+}

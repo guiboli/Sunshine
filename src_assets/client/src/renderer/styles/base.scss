@@ -1,0 +1,76 @@
+@import './variables.scss';
+
+/* ==== Basic styles ==== */
+
+/* ==== Fonts ==== */
+@font-face {
+  font-family: Kallisto;
+  src: url('~@/assets/fonts/Kallisto\ Thin.otf');
+}
+
+@font-face {
+  font-family: Kallisto;
+  src: url('~@/assets/fonts/Kallisto\ Medium.otf');
+}
+
+@font-face {
+  font-family: Kallisto;
+  font-style: italic;
+  src: url('~@/assets/fonts/Kallisto\ Medium\ Italic.otf');
+}
+
+@font-face {
+  font-family: Kallisto;
+  font-weight: bold;
+  src: url('~@/assets/fonts/Kallisto\ Bold.otf');
+}
+
+@font-face {
+  font-family: Kallisto;
+  font-weight: bolder;
+  src: url('~@/assets/fonts/Kallisto\ Heavy.otf');
+}
+
+@font-face {
+  font-family: PlutoSans;
+  src: url('~@/assets/fonts/PlutoSansRegular.otf');
+}
+
+@font-face {
+  font-family: SourceHanSans;
+  src: url('~@/assets/fonts/SourceHanSansCN-Regular.otf');
+}
+
+/* Auto fill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill::first-line,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-family: $dm-fonts !important;
+  -webkit-text-fill-color: $primary-font-color;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* reset default style */
+/* stylelint-disable-next-line */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: $primary-font-color;
+  font-family: $dm-fonts;
+  font-size: 14px;
+  width: 100%;
+}

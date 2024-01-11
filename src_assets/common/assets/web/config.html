@@ -15,20 +15,20 @@
     </ul>
     <!--General Tab-->
     <div v-if="currentTab === 'general'" class="config-page">
-      <!--Sunshine Name-->
-      <div class="mb-3">
-        <label for="sunshine_name" class="form-label">Sunshine Name</label>
+      <!--Streamer Name-->
+      <!-- <div class="mb-3">
+        <label for="sunshine_name" class="form-label">Streamer Name</label>
         <input
           type="text"
           class="form-control"
           id="sunshine_name"
-          placeholder="Sunshine"
+          placeholder="Streamer"
           v-model="config.sunshine_name"
         />
         <div class="form-text">
           The name displayed by Moonlight. If not specified, the PC's hostname is used
         </div>
-      </div>
+      </div> -->
       <!--Log Level-->
       <div class="mb-3">
         <label for="min_log_level" class="form-label">Log Level</label>
@@ -60,7 +60,7 @@
           v-model="config.log_path"
         />
         <div class="form-text">
-          The file where the current logs of Sunshine are stored.
+          The file where the current logs of Streamer are stored.
         </div>
       </div>
       <!--Origin Web UI Allowed-->
@@ -78,7 +78,8 @@
           <option value="wan">Anyone may access Web UI</option>
         </select>
         <div class="form-text">
-          The origin of the remote endpoint address that is not denied access to Web UI
+          The origin of the remote endpoint address that is not denied access to
+          Web UI
         </div>
       </div>
       <!--UPnP-->
@@ -97,7 +98,9 @@
           <option value="ds4">DS4 (PS4)</option>
           <option value="x360">X360 (Xbox 360)</option>
         </select>
-        <div class="form-text">Choose which type of gamepad to Emulate on the host</div>
+        <div class="form-text">
+          Choose which type of gamepad to Emulate on the host
+        </div>
       </div>
       <!--Ping Timeout-->
       <div class="mb-3">
@@ -110,7 +113,8 @@
           v-model="config.ping_timeout"
         />
         <div class="form-text">
-          How long to wait in milliseconds for data from moonlight before shutting down the stream
+          How long to wait in milliseconds for data from moonlight before
+          shutting down the stream
         </div>
       </div>
       <!--Advertised FPS and Resolutions-->
@@ -193,12 +197,14 @@
             </form>
           </div>
         </div>
-        <div class="form-text">
-          The display modes advertised by Sunshine<br />
-          Some versions of Moonlight, such as Moonlight-nx (Switch), rely on this list to ensure that the requested
-          resolutions and fps are supported.<br>
-          This setting does <b>not</b> change how the screen stream is sent to Moonlight
-        </div>
+        <!-- <div class="form-text">
+          The display modes advertised by Streamer<br />
+          Some versions of Moonlight, such as Moonlight-nx (Switch), rely on
+          this list to ensure that the requested resolutions and fps are
+          supported.<br />
+          This setting does <b>not</b> change how the screen stream is sent to
+          Moonlight
+        </div> -->
       </div>
       <!-- Mapping Key AltRight to Key Windows -->
       <div class="mb-3">
@@ -214,16 +220,19 @@
           <option value="enabled">Enabled</option>
         </select>
         <div class="form-text">
-          It may be possible that you cannot send the Windows Key from Moonlight directly.<br />
-          In those cases it may be useful to make Sunshine think the Right Alt key is the Windows key
+          It may be possible that you cannot send the Windows Key from Moonlight
+          directly.<br />
+          In those cases it may be useful to make Streamer think the Right Alt
+          key is the Windows key
         </div>
       </div>
       <!-- Global Prep Commands -->
       <div class="mb-3 d-flex flex-column">
         <label class="form-label">Command Preparations</label>
         <div class="form-text">
-          Configure a list of commands to be executed before or after running any application. 
-          If any of the specified preparation commands fail, the application launch process will be aborted.
+          Configure a list of commands to be executed before or after running
+          any application. If any of the specified preparation commands fail,
+          the application launch process will be aborted.
         </div>
         <table class="table" v-if="global_prep_cmd.length > 0">
           <thead>
@@ -239,10 +248,18 @@
           <tbody>
             <tr v-for="(c, i) in global_prep_cmd">
               <td>
-                <input type="text" class="form-control monospace" v-model="c.do" />
+                <input
+                  type="text"
+                  class="form-control monospace"
+                  v-model="c.do"
+                />
               </td>
               <td>
-                <input type="text" class="form-control monospace" v-model="c.undo" />
+                <input
+                  type="text"
+                  class="form-control monospace"
+                  v-model="c.undo"
+                />
               </td>
               <td v-if="platform === 'windows'">
                 <div class="form-check">
@@ -260,7 +277,10 @@
                 </div>
               </td>
               <td>
-                <button class="btn btn-danger" @click="$delete(global_prep_cmd, i)">
+                <button
+                  class="btn btn-danger"
+                  @click="$delete(global_prep_cmd, i)"
+                >
                   <i class="fas fa-trash"></i>
                 </button>
                 <button class="btn btn-success" @click="add_global_prep_cmd">
@@ -269,8 +289,12 @@
               </td>
             </tr>
           </tbody>
-        </table>              
-        <button class="mt-2 btn btn-success" style="margin: 0 auto" @click="add_global_prep_cmd">
+        </table>
+        <button
+          class="mt-2 btn btn-success"
+          style="margin: 0 auto"
+          @click="add_global_prep_cmd"
+        >
           &plus; Add
         </button>
       </div>
@@ -315,7 +339,7 @@
           v-model="config.file_state"
         />
         <div class="form-text">
-          The file where current state of Sunshine is stored
+          The file where current state of Streamer is stored
         </div>
       </div>
       <!--Apps File-->
@@ -329,7 +353,7 @@
           v-model="config.file_apps"
         />
         <div class="form-text">
-          The file where current apps of Sunshine are stored
+          The file where current apps of Streamer are stored
         </div>
       </div>
     </div>
@@ -347,20 +371,16 @@
           v-model="config.back_button_timeout"
         />
         <div class="form-text">
-          If the Back/Select button is held down for the specified number of milliseconds, a Home/Guide button press is emulated.<br />
-          If set to a value &lt; 0 (default), holding the Back/Select button will not emulate the Home/Guide button.<br />
+          If the Back/Select button is held down for the specified number of
+          milliseconds, a Home/Guide button press is emulated.<br />
+          If set to a value &lt; 0 (default), holding the Back/Select button
+          will not emulate the Home/Guide button.<br />
         </div>
       </div>
       <!--Enable Mouse Input-->
       <div class="mb-3">
-        <label for="mouse" class="form-label"
-          >Enable Mouse Input</label
-        >
-        <select
-          id="mouse"
-          class="form-select"
-          v-model="config.mouse"
-        >
+        <label for="mouse" class="form-label">Enable Mouse Input</label>
+        <select id="mouse" class="form-select" v-model="config.mouse">
           <option value="disabled">Disabled</option>
           <option value="enabled">Enabled</option>
         </select>
@@ -370,14 +390,8 @@
       </div>
       <!--Enable Keyboard Input-->
       <div class="mb-3">
-        <label for="keyboard" class="form-label"
-          >Enable Keyboard Input</label
-        >
-        <select
-          id="keyboard"
-          class="form-select"
-          v-model="config.keyboard"
-        >
+        <label for="keyboard" class="form-label">Enable Keyboard Input</label>
+        <select id="keyboard" class="form-select" v-model="config.keyboard">
           <option value="disabled">Disabled</option>
           <option value="enabled">Enabled</option>
         </select>
@@ -387,14 +401,8 @@
       </div>
       <!--Enable Gamepad Input-->
       <div class="mb-3">
-        <label for="gamepad" class="form-label"
-          >Enable Gamepad Input</label
-        >
-        <select
-          id="gamepad"
-          class="form-select"
-          v-model="config.controller"
-        >
+        <label for="gamepad" class="form-label">Enable Gamepad Input</label>
+        <select id="gamepad" class="form-select" v-model="config.controller">
           <option value="disabled">Disabled</option>
           <option value="enabled">Enabled</option>
         </select>
@@ -450,11 +458,13 @@
           <option value="enabled">Enabled</option>
         </select>
         <div class="form-text">
-          Sending scancodes enhances compatibility with games and apps
-          but may result in incorrect keyboard input from certain clients
-          that aren't using a US English keyboard layout.<br />
-          Enable if keyboard input is not working at all in certain applications.<br />
-          Disable if keys on the client are generating the wrong input on the host.
+          Sending scancodes enhances compatibility with games and apps but may
+          result in incorrect keyboard input from certain clients that aren't
+          using a US English keyboard layout.<br />
+          Enable if keyboard input is not working at all in certain
+          applications.<br />
+          Disable if keys on the client are generating the wrong input on the
+          host.
         </div>
       </div>
     </div>
@@ -471,9 +481,14 @@
           v-model="config.audio_sink"
         />
         <div class="form-text">
-          Manually specify a specific audio device to capture. If unset, the device is chosen automatically.<br />
-          <b>We strongly recommend leaving this field blank to use automatic device selection!</b><br />
-          If you have multiple audio devices with identical names, you can get the Device ID using the following command:<br />
+          Manually specify a specific audio device to capture. If unset, the
+          device is chosen automatically.<br />
+          <b
+            >We strongly recommend leaving this field blank to use automatic
+            device selection!</b
+          ><br />
+          If you have multiple audio devices with identical names, you can get
+          the Device ID using the following command:<br />
           <pre>tools\audio-info.exe</pre>
         </div>
       </div>
@@ -488,7 +503,8 @@
         />
         <div class="form-text">
           The name of the audio sink used for Audio Loopback<br />
-          If you do not specify this variable, pulseaudio will select the default monitor device.<br />
+          If you do not specify this variable, pulseaudio will select the
+          default monitor device.<br />
           <br />
           You can find the name of the audio sink using either command:<br />
           <pre>pacmd list-sinks | grep "name:"</pre>
@@ -507,16 +523,19 @@
         />
         <div class="form-text">
           The name of the audio sink used for Audio Loopback<br />
-          Sunshine can only access microphones on macOS due to system limitations.<br />
-          To stream system audio using <a
-            href="https://github.com/mattingalls/Soundflower"
-            target="_blank">
+          Streamer can only access microphones on macOS due to system
+          limitations.<br />
+          To stream system audio using
+          <a href="https://github.com/mattingalls/Soundflower" target="_blank">
             Soundflower
-          </a> or <a
+          </a>
+          or
+          <a
             href="https://github.com/ExistentialAudio/BlackHole"
-            target="_blank">
-            BlackHole
-          </a>.
+            target="_blank"
+          >
+            BlackHole </a
+          >.
         </div>
       </div>
       <!--Virtual Sink-->
@@ -530,20 +549,31 @@
           v-model="config.virtual_sink"
         />
         <div class="form-text">
-          Manually specify a virtual audio device to use. If unset, the device is chosen automatically.<br />
-          <b>We strongly recommend leaving this field blank to use automatic device selection!</b><br />
+          Manually specify a virtual audio device to use. If unset, the device
+          is chosen automatically.<br />
+          <b
+            >We strongly recommend leaving this field blank to use automatic
+            device selection!</b
+          ><br />
         </div>
       </div>
       <!--Install Steam Audio Drivers-->
       <div class="mb-3" v-if="platform === 'windows'">
-        <label for="install_steam_audio_drivers" class="form-label">Install Steam Audio Drivers</label>
-        <select id="install_steam_audio_drivers" class="form-select" v-model="config.install_steam_audio_drivers">
+        <label for="install_steam_audio_drivers" class="form-label"
+          >Install Steam Audio Drivers</label
+        >
+        <select
+          id="install_steam_audio_drivers"
+          class="form-select"
+          v-model="config.install_steam_audio_drivers"
+        >
           <option value="disabled">Disabled</option>
           <option value="enabled">Enabled</option>
         </select>
         <div class="form-text">
-          If Steam is installed, this will automatically install the Steam Streaming Speakers driver to support
-          5.1/7.1 surround sound and muting host audio.
+          If Steam is installed, this will automatically install the Steam
+          Streaming Speakers driver to support 5.1/7.1 surround sound and muting
+          host audio.
         </div>
       </div>
       <!--Adapter Name -->
@@ -557,8 +587,12 @@
           v-model="config.adapter_name"
         />
         <div class="form-text" v-if="platform === 'windows'">
-          Manually specify a GPU to use for capture. If unset, the GPU is chosen automatically.<br />
-          <b>We strongly recommend leaving this field blank to use automatic GPU selection!</b><br />
+          Manually specify a GPU to use for capture. If unset, the GPU is chosen
+          automatically.<br />
+          <b
+            >We strongly recommend leaving this field blank to use automatic GPU
+            selection!</b
+          ><br />
           Note: This GPU must have a display connected and powered on.<br />
           The appropriate values can be found using the following command:<br />
           <pre>tools\dxgi-info.exe</pre>
@@ -575,8 +609,10 @@
           v-model="config.output_name"
         />
         <div class="form-text">
-          Manually specify a display to use for capture. If unset, the primary display is captured.<br />
-          Note: If you specified a GPU above, this display must be connected to that GPU.<br />
+          Manually specify a display to use for capture. If unset, the primary
+          display is captured.<br />
+          Note: If you specified a GPU above, this display must be connected to
+          that GPU.<br />
           The appropriate values can be found using the following command:<br />
           tools\dxgi-info.exe<br />
         </div>
@@ -603,9 +639,10 @@
           v-model="config.output_name"
         />
         <div class="form-text">
-          During Sunshine startup, you should see the list of detected monitors, e.g.:<br />
+          During Streamer startup, you should see the list of detected monitors,
+          e.g.:<br />
           <br />
-          <pre style="white-space: pre-line;">
+          <pre style="white-space: pre-line">
             Info: Detecting connected monitors
             Info: Detected monitor 0: DVI-D-0, connected: false
             Info: Detected monitor 1: HDMI-0, connected: true
@@ -613,7 +650,8 @@
             Info: Detected monitor 3: DP-1, connected: false
             Info: Detected monitor 4: DVI-D-1, connected: false
           </pre>
-          You need to use the value before the colon in the output, e.g. <b>1</b>.
+          You need to use the value before the colon in the output, e.g.
+          <b>1</b>.
         </div>
       </div>
     </div>
@@ -630,7 +668,7 @@
           placeholder="47989"
           v-model="config.port"
         />
-        <div class="form-text">Set the family of ports used by Sunshine</div>
+        <div class="form-text">Set the family of ports used by Streamer</div>
       </div>
       <!-- Quantization Parameter -->
       <div class="mb-3">
@@ -663,9 +701,12 @@
           v-model="config.min_threads"
         />
         <div class="form-text">
-          Increasing the value slightly reduces encoding efficiency, but the tradeoff is usually<br />
-          worth it to gain the use of more CPU cores for encoding. The ideal value is the lowest<br />
-          value that can reliably encode at your desired streaming settings on your hardware.
+          Increasing the value slightly reduces encoding efficiency, but the
+          tradeoff is usually<br />
+          worth it to gain the use of more CPU cores for encoding. The ideal
+          value is the lowest<br />
+          value that can reliably encode at your desired streaming settings on
+          your hardware.
         </div>
       </div>
       <!--HEVC Support -->
@@ -673,26 +714,31 @@
         <label for="hevc_mode" class="form-label">HEVC Support</label>
         <select id="hevc_mode" class="form-select" v-model="config.hevc_mode">
           <option value="0">
-            Sunshine will specify support for HEVC based on encoder
+            Streamer will specify support for HEVC based on encoder
           </option>
           <option value="1">
-            Sunshine will not advertise support for HEVC
+            Streamer will not advertise support for HEVC
           </option>
           <option value="2">
-            Sunshine will advertise support for HEVC Main profile
+            Streamer will advertise support for HEVC Main profile
           </option>
           <option value="3">
-            Sunshine will advertise support for HEVC Main and Main10 (HDR) profiles
+            Streamer will advertise support for HEVC Main and Main10 (HDR)
+            profiles
           </option>
         </select>
         <div class="form-text">
-          Allows the client to request HEVC Main or HEVC Main10 video streams.<br />
-          HEVC is more CPU-intensive to encode, so enabling this may reduce performance when using software encoding.
+          Allows the client to request HEVC Main or HEVC Main10 video
+          streams.<br />
+          HEVC is more CPU-intensive to encode, so enabling this may reduce
+          performance when using software encoding.
         </div>
       </div>
       <!--Capture-->
       <div class="mb-3" v-if="platform === 'linux'">
-        <label for="capture" class="form-label">Force a Specific Capture Method</label>
+        <label for="capture" class="form-label"
+          >Force a Specific Capture Method</label
+        >
         <select id="capture" class="form-select" v-model="config.capture">
           <option value="">Autodetect</option>
           <option value="nvfbc">NvFBC</option>
@@ -701,7 +747,8 @@
           <option value="x11">X11</option>
         </select>
         <div class="form-text">
-          Force a specific capture method, otherwise Sunshine will use the first one that works. NvFBC requires patched nvidia drivers.
+          Force a specific capture method, otherwise Streamer will use the first
+          one that works. NvFBC requires patched nvidia drivers.
         </div>
       </div>
       <!--Encoder-->
@@ -709,16 +756,29 @@
         <label for="encoder" class="form-label">Force a Specific Encoder</label>
         <select id="encoder" class="form-select" v-model="config.encoder">
           <option value="">Autodetect</option>
-          <option value="nvenc" v-if="platform === 'windows' || platform === 'linux'">NVIDIA NVENC</option>
-          <option value="quicksync" v-if="platform === 'windows'">Intel QuickSync</option>
-          <option value="amdvce" v-if="platform === 'windows'">AMD AMF/VCE</option>
+          <option
+            value="nvenc"
+            v-if="platform === 'windows' || platform === 'linux'"
+          >
+            NVIDIA NVENC
+          </option>
+          <option value="quicksync" v-if="platform === 'windows'">
+            Intel QuickSync
+          </option>
+          <option value="amdvce" v-if="platform === 'windows'">
+            AMD AMF/VCE
+          </option>
           <option value="vaapi" v-if="platform === 'linux'">VA-API</option>
-          <option value="videotoolbox" v-if="platform === 'macos'">VideoToolbox</option>
+          <option value="videotoolbox" v-if="platform === 'macos'">
+            VideoToolbox
+          </option>
           <option value="software">Software</option>
         </select>
         <div class="form-text">
-          Force a specific encoder, otherwise Sunshine will use the first encoder that is available<br />
-          Note: If you specify a hardware encoder on Windows, it must match the GPU where the display is connected.
+          Force a specific encoder, otherwise Streamer will use the first
+          encoder that is available<br />
+          Note: If you specify a hardware encoder on Windows, it must match the
+          GPU where the display is connected.
         </div>
       </div>
       <!--FEC Percentage-->
@@ -732,8 +792,10 @@
           v-model="config.fec_percentage"
         />
         <div class="form-text">
-          Percentage of error correcting packets per data packet in each video frame.<br />
-          Higher values can correct for more network packet loss, but at the cost of increasing bandwidth usage.<br />
+          Percentage of error correcting packets per data packet in each video
+          frame.<br />
+          Higher values can correct for more network packet loss, but at the
+          cost of increasing bandwidth usage.<br />
           The default value of 20 is what GeForce Experience uses.
         </div>
       </div>
@@ -748,16 +810,17 @@
           v-model="config.channels"
         />
         <div class="form-text">
-          When multicasting, it could be useful to have different configurations for each connected Client. For example:
+          When multicasting, it could be useful to have different configurations
+          for each connected Client. For example:
           <ul>
             <li>
-              Clients connected through WAN and LAN have different bitrate constraints.
+              Clients connected through WAN and LAN have different bitrate
+              constraints.
             </li>
-            <li>
-              Decoders may require different settings for color
-            </li>
+            <li>Decoders may require different settings for color</li>
           </ul>
-          Unlike simply broadcasting to multiple Client, this will generate distinct video streams.<br />
+          Unlike simply broadcasting to multiple Client, this will generate
+          distinct video streams.<br />
           Note, CPU usage increases for each distinct video stream generated
         </div>
       </div>
@@ -774,7 +837,7 @@
           v-model="config.credentials_file"
         />
         <div class="form-text">
-          Store Username/Password separately from Sunshine's state file.
+          Store Username/Password separately from Streamer's state file.
         </div>
       </div>
       <!--Origin PIN Allowed-->
@@ -792,7 +855,8 @@
           <option value="wan">Anyone may access /pin</option>
         </select>
         <div class="form-text">
-          The origin of the remote endpoint address that is not denied for HTTP method /pin
+          The origin of the remote endpoint address that is not denied for HTTP
+          method /pin
         </div>
       </div>
       <!--External IP-->
@@ -806,7 +870,8 @@
           v-model="config.external_ip"
         />
         <div class="form-text">
-          If no external IP address is given, Sunshine will automatically detect external IP
+          If no external IP address is given, Streamer will automatically detect
+          external IP
         </div>
       </div>
     </div>
@@ -826,21 +891,38 @@
           <option value="veryslow">veryslow</option>
         </select>
         <div class="form-text">
-          Optimize the trade-off between encoding speed (encoded frames per second) and compression efficiency (quality per bit in the bitstream). Defaults to superfast.
+          Optimize the trade-off between encoding speed (encoded frames per
+          second) and compression efficiency (quality per bit in the bitstream).
+          Defaults to superfast.
         </div>
       </div>
       <div class="mb-3">
         <label for="sw_tune" class="form-label">SW Tune</label>
         <select id="sw_tune" class="form-select" v-model="config.sw_tune">
-          <option value="film">film -- use for high quality movie content; lowers deblocking</option>
-          <option value="animation">animation -- good for cartoons; uses higher deblocking and more reference frames</option>
-          <option value="grain">grain -- preserves the grain structure in old, grainy film material</option>
-          <option value="stillimage">stillimage -- good for slideshow-like content</option>
-          <option value="fastdecode">fastdecode -- allows faster decoding by disabling certain filters</option>
-          <option value="zerolatency">zerolatency -- good for fast encoding and low-latency streaming (default)</option>
+          <option value="film">
+            film -- use for high quality movie content; lowers deblocking
+          </option>
+          <option value="animation">
+            animation -- good for cartoons; uses higher deblocking and more
+            reference frames
+          </option>
+          <option value="grain">
+            grain -- preserves the grain structure in old, grainy film material
+          </option>
+          <option value="stillimage">
+            stillimage -- good for slideshow-like content
+          </option>
+          <option value="fastdecode">
+            fastdecode -- allows faster decoding by disabling certain filters
+          </option>
+          <option value="zerolatency">
+            zerolatency -- good for fast encoding and low-latency streaming
+            (default)
+          </option>
         </select>
         <div class="form-text">
-          Tuning options, which are applied after the preset. Defaults to zerolatency.
+          Tuning options, which are applied after the preset. Defaults to
+          zerolatency.
         </div>
       </div>
     </div>
@@ -880,8 +962,12 @@
         <label for="nv_coder" class="form-label">NVENC Coder (H264)</label>
         <select id="nv_coder" class="form-select" v-model="config.nv_coder">
           <option value="auto">auto -- let ffmpeg decide (default)</option>
-          <option value="cabac">cabac -- context adaptive binary arithmetic coding - higher quality</option>
-          <option value="cavlc">cavlc -- context adaptive variable-length coding - faster decode</option>
+          <option value="cabac">
+            cabac -- context adaptive binary arithmetic coding - higher quality
+          </option>
+          <option value="cavlc">
+            cavlc -- context adaptive variable-length coding - faster decode
+          </option>
         </select>
       </div>
     </div>
@@ -903,8 +989,12 @@
         <label for="qsv_coder" class="form-label">QuickSync Coder (H264)</label>
         <select id="qsv_coder" class="form-select" v-model="config.qsv_coder">
           <option value="auto">auto -- let ffmpeg decide (default)</option>
-          <option value="cabac">cabac -- context adaptive binary arithmetic coding - higher quality</option>
-          <option value="cavlc">cavlc -- context adaptive variable-length coding - faster decode</option>
+          <option value="cabac">
+            cabac -- context adaptive binary arithmetic coding - higher quality
+          </option>
+          <option value="cavlc">
+            cavlc -- context adaptive variable-length coding - faster decode
+          </option>
         </select>
       </div>
     </div>
@@ -916,7 +1006,8 @@
         <select
           id="amd_quality"
           class="form-select"
-          v-model="config.amd_quality">
+          v-model="config.amd_quality"
+        >
           <option value="speed">speed -- prefer speed</option>
           <option value="balanced">balanced -- balanced (default)</option>
           <option value="quality">quality -- prefer quality</option>
@@ -926,29 +1017,43 @@
         <label for="amd_rc" class="form-label">AMF Rate Control</label>
         <select id="amd_rc" class="form-select" v-model="config.amd_rc">
           <option value="cqp">cqp -- constant qp mode</option>
-          <option value="vbr_latency">vbr_latency -- latency constrained variable bitrate (default)</option>
-          <option value="vbr_peak">vbr_peak -- peak contrained variable bitrate</option>
+          <option value="vbr_latency">
+            vbr_latency -- latency constrained variable bitrate (default)
+          </option>
+          <option value="vbr_peak">
+            vbr_peak -- peak contrained variable bitrate
+          </option>
           <option value="cbr">cbr -- constant bitrate</option>
         </select>
       </div>
       <div class="mb-3">
         <label for="amd_usage" class="form-label">AMF Usage</label>
         <select id="amd_usage" class="form-select" v-model="config.amd_usage">
-          <option value="transcoding">transcoding -- transcoding (slowest)</option>
+          <option value="transcoding">
+            transcoding -- transcoding (slowest)
+          </option>
           <option value="webcam">webcam -- webcam (slow)</option>
           <option value="lowlatency">lowlatency - low latency (fast)</option>
-          <option value="ultralowlatency">ultralowlatency - ultra low latency (fastest)</option>
+          <option value="ultralowlatency">
+            ultralowlatency - ultra low latency (fastest)
+          </option>
         </select>
       </div>
       <div class="mb-3">
         <label for="amd_preanalysis" class="form-label">AMF Preanalysis</label>
-        <select id="amd_preanalysis" class="form-select" v-model="config.amd_preanalysis">
+        <select
+          id="amd_preanalysis"
+          class="form-select"
+          v-model="config.amd_preanalysis"
+        >
           <option value="enabled">enabled</option>
           <option value="disabled">disabled (default)</option>
         </select>
       </div>
       <div class="mb-3">
-        <label for="amd_vbaq" class="form-label">AMF Variance Based Adaptive Quantization (VBAQ)</label>
+        <label for="amd_vbaq" class="form-label"
+          >AMF Variance Based Adaptive Quantization (VBAQ)</label
+        >
         <select id="amd_vbaq" class="form-select" v-model="config.amd_vbaq">
           <option value="enabled">enabled (default)</option>
           <option value="disabled">disabled</option>
@@ -958,8 +1063,12 @@
         <label for="amd_coder" class="form-label">AMF Coder (H264)</label>
         <select id="amd_coder" class="form-select" v-model="config.amd_coder">
           <option value="auto">auto -- let ffmpeg decide (default)</option>
-          <option value="cabac">cabac -- context adaptive variable-length coding - higher quality</option>
-          <option value="cavlc">cavlc -- context adaptive binary arithmetic coding - faster decode</option>
+          <option value="cabac">
+            cabac -- context adaptive variable-length coding - higher quality
+          </option>
+          <option value="cavlc">
+            cavlc -- context adaptive binary arithmetic coding - faster decode
+          </option>
         </select>
       </div>
     </div>
@@ -984,8 +1093,14 @@
         </select>
       </div>
       <div class="mb-3">
-        <label for="vt_software" class="form-label">VideoToolbox Software Encoding</label>
-        <select id="vt_software" class="form-select" v-model="config.vt_software">
+        <label for="vt_software" class="form-label"
+          >VideoToolbox Software Encoding</label
+        >
+        <select
+          id="vt_software"
+          class="form-select"
+          v-model="config.vt_software"
+        >
           <option value="auto">auto</option>
           <option value="disabled">disabled</option>
           <option value="allowed">allowed</option>
@@ -993,8 +1108,14 @@
         </select>
       </div>
       <div class="mb-3">
-        <label for="vt_realtime" class="form-label">VideoToolbox Realtime Encoding</label>
-        <select id="vt_realtime" class="form-select" v-model="config.vt_realtime">
+        <label for="vt_realtime" class="form-label"
+          >VideoToolbox Realtime Encoding</label
+        >
+        <select
+          id="vt_realtime"
+          class="form-select"
+          v-model="config.vt_realtime"
+        >
           <option value="enabled">enabled</option>
           <option value="disabled">disabled</option>
         </select>
@@ -1002,56 +1123,60 @@
     </div>
   </div>
   <div class="alert alert-success my-4" v-if="saved && !restarted">
-    <b>Success!</b> Click 'Apply' to restart Sunshine and apply changes. This will terminate any running sessions.
+    <b>Success!</b> Click 'Apply' to restart Streamer and apply changes. This
+    will terminate any running sessions.
   </div>
   <div class="alert alert-success my-4" v-if="restarted">
-    <b>Success!</b> Sunshine is restarting to apply changes.
+    <b>Success!</b> Streamer is restarting to apply changes.
   </div>
   <div class="mb-3 buttons">
     <button class="btn btn-primary" @click="save">Save</button>
-    <button class="btn btn-success" @click="apply" v-if="saved && !restarted">Apply</button>
+    <button class="btn btn-success" @click="apply" v-if="saved && !restarted">
+      Apply
+    </button>
   </div>
 </div>
 
 <script>
   // create dictionary for defaultConfig
   const defaultConfig = {
-    "always_send_scancodes": "enabled",
-    "amd_coder": "auto",
-    "amd_preanalysis": "disabled",
-    "amd_quality": "balanced",
-    "amd_rc": "vbr_latency",
-    "amd_usage": "ultralowlatency",
-    "amd_vbaq": "enabled",
-    "capture": "",
-    "controller": "enabled",
-    "install_steam_audio_drivers": "enabled",
-    "dwmflush": "enabled",
-    "encoder": "",
-    "fps": "[10,30,60,90,120]",
-    "gamepad": "x360",
-    "hevc_mode": 0,
-    "key_rightalt_to_key_win": "disabled",
-    "keyboard": "enabled",
-    "min_log_level": 2,
-    "mouse": "enabled",
-    "nv_coder": "auto",
-    "nv_preset": "p4",
-    "nv_rc": "cbr",
-    "nv_tune": "ull",
-    "origin_pin_allowed": "pc",
-    "origin_web_ui_allowed": "lan",
-    "qsv_coder": "auto",
-    "qsv_preset": "medium",
-    "resolutions": "[352x240,480x360,858x480,1280x720,1920x1080,2560x1080,3440x1440,1920x1200,3840x2160,3840x1600]",
-    "sw_preset": "superfast",
-    "sw_tune": "zerolatency",
-    "upnp": "disabled",
-    "vt_coder": "auto",
-    "vt_realtime": "enabled",
-    "vt_software": "auto",
-    "global_prep_cmd": "[]",
-  }
+    always_send_scancodes: "enabled",
+    amd_coder: "auto",
+    amd_preanalysis: "disabled",
+    amd_quality: "balanced",
+    amd_rc: "vbr_latency",
+    amd_usage: "ultralowlatency",
+    amd_vbaq: "enabled",
+    capture: "",
+    controller: "enabled",
+    install_steam_audio_drivers: "enabled",
+    dwmflush: "enabled",
+    encoder: "",
+    fps: "[10,30,60,90,120]",
+    gamepad: "x360",
+    hevc_mode: 0,
+    key_rightalt_to_key_win: "disabled",
+    keyboard: "enabled",
+    min_log_level: 2,
+    mouse: "enabled",
+    nv_coder: "auto",
+    nv_preset: "p4",
+    nv_rc: "cbr",
+    nv_tune: "ull",
+    origin_pin_allowed: "pc",
+    origin_web_ui_allowed: "lan",
+    qsv_coder: "auto",
+    qsv_preset: "medium",
+    resolutions:
+      "[352x240,480x360,858x480,1280x720,1920x1080,2560x1080,3440x1440,1920x1200,3840x2160,3840x1600]",
+    sw_preset: "superfast",
+    sw_tune: "zerolatency",
+    upnp: "disabled",
+    vt_coder: "auto",
+    vt_realtime: "enabled",
+    vt_software: "auto",
+    global_prep_cmd: "[]",
+  };
 
   new Vue({
     el: "#app",
@@ -1135,7 +1260,12 @@
           }
           if (this.platform === "macos") {
             this.tabs = this.tabs.filter((el) => {
-              return el.id !== "amd" && el.id !== "nv" && el.id !== "qsv" && el.id !== "va-api";
+              return (
+                el.id !== "amd" &&
+                el.id !== "nv" &&
+                el.id !== "qsv" &&
+                el.id !== "va-api"
+              );
             });
           }
 
@@ -1146,7 +1276,7 @@
           //Populate default values if not present in config
           for (let key in defaultConfig) {
             if (this.config[key] === undefined) {
-              this.config[key] = defaultConfig[key]
+              this.config[key] = defaultConfig[key];
             }
           }
 
@@ -1159,7 +1289,7 @@
           let resolutions = [];
           res.split(",").forEach((r) => resolutions.push(r.trim()));
           this.resolutions = resolutions;
-          
+
           this.config.global_prep_cmd = this.config.global_prep_cmd || [];
           this.global_prep_cmd = JSON.parse(this.config.global_prep_cmd);
         });
@@ -1184,29 +1314,33 @@
         this.serialize();
 
         // create a temp copy of this.config to use for the post request
-        let config = JSON.parse(JSON.stringify(this.config))
+        let config = JSON.parse(JSON.stringify(this.config));
 
         // delete default values from this.config
         for (let key in defaultConfig) {
-          let delete_value = false
+          let delete_value = false;
           if (key === "resolutions" || key === "fps") {
-            let regex = /([\d]+x[\d]+)/g
+            let regex = /([\d]+x[\d]+)/g;
             // Use a regular expression to find each value and replace it with a quoted version
 
-            let config_value = JSON.parse(config[key].replace(regex, '"$1"')).toString()
-            let default_value = JSON.parse(defaultConfig[key].replace(regex, '"$1"')).toString()
+            let config_value = JSON.parse(
+              config[key].replace(regex, '"$1"')
+            ).toString();
+            let default_value = JSON.parse(
+              defaultConfig[key].replace(regex, '"$1"')
+            ).toString();
 
             if (config_value === default_value) {
-              delete_value = true
+              delete_value = true;
             }
           }
 
           if (config[key] === defaultConfig[key]) {
-            delete_value = true
+            delete_value = true;
           }
 
           if (delete_value) {
-            delete config[key]
+            delete config[key];
           }
         }
 
@@ -1215,11 +1349,10 @@
           body: JSON.stringify(config),
         }).then((r) => {
           if (r.status === 200) {
-            this.saved = true
-            return this.saved
-          }
-          else {
-            return false
+            this.saved = true;
+            return this.saved;
+          } else {
+            return false;
           }
         });
       },
@@ -1234,7 +1367,7 @@
               this.saved = this.restarted = false;
             }, 5000);
             fetch("/api/restart", {
-              method: "POST"
+              method: "POST",
             });
           }
         });
@@ -1245,8 +1378,8 @@
           undo: "",
         };
 
-        if(this.platform === 'windows'){
-          template = {...template, elevated: false};
+        if (this.platform === "windows") {
+          template = { ...template, elevated: false };
         }
         this.global_prep_cmd.push(template);
       },

@@ -4,7 +4,7 @@ import React from "react";
 const ErrorStatusPage = () => {
   return (
     <div>
-      <p>Error! Server not Launch</p>
+      <p>Error! Steamer not Launch</p>
     </div>
   );
 };

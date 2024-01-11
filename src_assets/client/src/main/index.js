@@ -1,7 +1,8 @@
 import log from "electron-log/main";
 import path from "path";
 
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
+
 const { exec, execSync } = require("node:child_process");
 const { checkIsRunning, checkIsDev, delay, loadURL } = require("./utils/utils");
 const { EventNamesMap, SunshineHttpAddress } = require("./constants/constant");
@@ -20,6 +21,11 @@ if (!isSingleInstance) {
 if (require("electron-squirrel-startup")) {
   app.quit();
 }
+
+ipcMain.on("relaunch", (evt, arg) => {
+  app.relaunch({ args: process.argv.slice(1).concat(["--relaunch"]) });
+  app.exit(0);
+});
 
 let sunshinePid = "";
 const createWindow = async () => {
@@ -94,6 +100,7 @@ const createWindow = async () => {
             loadURL(mainWindow, MAIN_WINDOW_WEBPACK_ENTRY, "error");
           }
           if (message === EventNamesMap.SUNSHINE_READY) {
+            // loadURL(mainWindow, MAIN_WINDOW_WEBPACK_ENTRY, "error");
             mainWindow.loadURL(SunshineHttpAddress);
           }
         });

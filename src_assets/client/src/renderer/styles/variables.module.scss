@@ -1,0 +1,7 @@
+@import './variables.scss';
+
+:export {
+  DEFAULT_FONTS: $default-fonts;
+  PRIMARY_FONT_COLOR: $font-color-01;
+  SECONDARY_FONT_COLOR: $font-color-02;
+}

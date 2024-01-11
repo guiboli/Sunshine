@@ -33,6 +33,7 @@ const createWindow = async () => {
     mainWindow = new BrowserWindow({
       width: 800,
       height: 600,
+      title: "广汽串流",
       icon: new URL("../../images/icon.png", import.meta.url).href,
       webPreferences: {
         nodeIntegration: true,

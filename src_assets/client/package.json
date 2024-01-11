@@ -1,8 +1,8 @@
 {
-  "name": "client",
-  "productName": "client",
+  "name": "gac-streaming-client",
+  "productName": "gac-streaming-client",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Streaming of GAC",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",

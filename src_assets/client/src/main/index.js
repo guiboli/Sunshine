@@ -33,6 +33,7 @@ const createWindow = async () => {
     mainWindow = new BrowserWindow({
       width: 800,
       height: 600,
+      icon: new URL("../../images/icon.png", import.meta.url).href,
       webPreferences: {
         nodeIntegration: true,
         nodeIntegrationInWorker: true,
@@ -58,11 +59,11 @@ const createWindow = async () => {
       const p = new Promise((r, rj) => {
         // launch sunshine
         exec(
-          `sunshine 1> /tmp/sunshine_info.log 2> /tmp/sunshine_error.log &`,
+          `sunshine 1> /tmp/streamer_info.log 2> /tmp/streamer_error.log &`,
           (code, stdout, stderr) => {
             r(code);
             if (stderr != "") {
-              log.error(`[main] launch Sunshine occurs error: `, stderr);
+              log.error(`[main] launch Streamer occurs error: `, stderr);
 
               return;
             }
@@ -70,7 +71,7 @@ const createWindow = async () => {
             const pidofStdout = execSync(`pidof sunshine`).toString();
             if (pidofStdout != null) {
               sunshinePid = pidofStdout;
-              log.info(`[main] sunshinePid:`, sunshinePid);
+              log.info(`[main] streamer pid:`, sunshinePid);
             }
           }
         );
@@ -127,17 +128,17 @@ app.on("window-all-closed", () => {
 app.on("before-quit", () => {
   log.info(`[main] before-quit called`);
   if (sunshinePid !== "") {
-    log.info(`[main] will kill Sunshine process: `, sunshinePid);
+    log.info(`[main] will kill Streamer process: `, sunshinePid);
     try {
       const result = process.kill(sunshinePid);
       if (!result) {
         process.abort(sunshinePid);
       }
     } catch (err) {
-      log.error(`[main] kill Sunshine process occurs error: `, err);
+      log.error(`[main] kill Streamer process occurs error: `, err);
       process.abort(sunshinePid);
     } finally {
-      log.info(`[main] kill Sunshine process done`);
+      log.info(`[main] kill Streamer process done`);
     }
   }
 });

@@ -1,6 +1,7 @@
 import "~/styles/error-status-page.scss";
 import React from "react";
 import Button from "@mui/material/Button";
+import { LogoIcon } from "../icons/LogoIcon";
 
 const ErrorStatusPage = () => {
   const relaunch = () => {
@@ -11,8 +12,9 @@ const ErrorStatusPage = () => {
   return (
     <div className="error-status-page">
       <div className="error-status-page__wrapper">
+        <LogoIcon className="error-status-page__wrapper--icon"></LogoIcon>
         <p className="error-status-page__wrapper--text">
-          Error! Steamer 未启动
+          Error! 广汽串流应用未启动
         </p>
         <Button
           className="error-status-page__wrapper--btn"

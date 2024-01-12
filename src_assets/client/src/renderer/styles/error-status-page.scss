@@ -8,6 +8,12 @@
   &__wrapper{
     margin: auto;
     text-align: center;
+
+    &--icon{
+      text-align: center;
+      font-size: 1.2rem !important;
+    }
+    
     &--text{
       text-align: center;
       font-size: 0.36rem;

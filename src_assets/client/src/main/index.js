@@ -37,6 +37,7 @@ const createWindow = async () => {
   {
     // Create the browser window.
     mainWindow = new BrowserWindow({
+      fullscreen: false,
       width: 800,
       height: 600,
       title: "广汽串流",
@@ -47,6 +48,8 @@ const createWindow = async () => {
         preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       },
     });
+
+    mainWindow.maximize();
 
     if (checkIsDev()) {
       mainWindow.webContents.openDevTools();

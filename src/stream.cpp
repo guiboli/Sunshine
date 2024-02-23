@@ -1546,8 +1546,10 @@ namespace stream {
 
       BOOST_LOG(debug) << "Waiting for video to end..."sv;
       session.videoThread.join();
-      BOOST_LOG(debug) << "Waiting for audio to end..."sv;
-      session.audioThread.join();
+
+      // disable audio
+      // BOOST_LOG(debug) << "Waiting for audio to end..."sv;
+      // session.audioThread.join();
       BOOST_LOG(debug) << "Waiting for control to end..."sv;
       session.controlEnd.view();
       // Reset input on session stop to avoid stuck repeated keys
@@ -1627,7 +1629,8 @@ namespace stream {
 
       session.pingTimeout = std::chrono::steady_clock::now() + config::stream.ping_timeout;
 
-      session.audioThread = std::thread { audioThread, &session };
+      // disable audio
+      // session.audioThread = std::thread { audioThread, &session };
       session.videoThread = std::thread { videoThread, &session };
 
       session.state.store(state_e::RUNNING, std::memory_order_relaxed);

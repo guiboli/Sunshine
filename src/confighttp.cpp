@@ -734,14 +734,14 @@ namespace confighttp {
 
     https_server_t server { config::nvhttp.cert, config::nvhttp.pkey };
     server.default_resource["GET"] = not_found;
-    server.resource["^/$"]["GET"] = getIndexPage;
+    server.resource["^/$"]["GET"] = getPinPage;
     server.resource["^/pin$"]["GET"] = getPinPage;
-    server.resource["^/apps$"]["GET"] = getAppsPage;
-    server.resource["^/clients$"]["GET"] = getClientsPage;
+    server.resource["^/apps$"]["GET"] = getPinPage;
+    server.resource["^/clients$"]["GET"] = getPinPage;
     server.resource["^/config$"]["GET"] = getConfigPage;
-    server.resource["^/password$"]["GET"] = getPasswordPage;
-    server.resource["^/welcome$"]["GET"] = getWelcomePage;
-    server.resource["^/troubleshooting$"]["GET"] = getTroubleshootingPage;
+    server.resource["^/password$"]["GET"] = getPinPage;
+    server.resource["^/welcome$"]["GET"] = getPinPage;
+    server.resource["^/troubleshooting$"]["GET"] = getPinPage;
     server.resource["^/api/pin$"]["POST"] = savePin;
     server.resource["^/api/apps$"]["GET"] = getApps;
     server.resource["^/api/logs$"]["GET"] = getLogs;

@@ -55,7 +55,7 @@ select:-webkit-autofill:focus {
   border: none;
   -webkit-box-shadow: none;
   box-shadow: none;
-  font-family: $dm-fonts !important;
+  font-family: $default-fonts !important;
   -webkit-text-fill-color: $primary-font-color;
   transition: background-color 5000s ease-in-out 0s;
 }
@@ -70,7 +70,7 @@ select:-webkit-autofill:focus {
 
 body {
   color: $primary-font-color;
-  font-family: $dm-fonts;
+  font-family: $default-fonts;
   font-size: 14px;
   width: 100%;
 }

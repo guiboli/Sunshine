@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs");
 const shell = require("shelljs");
 const archiver = require("archiver");
+const package = require("./package.json");
 
 module.exports = {
   packagerConfig: {
@@ -19,7 +20,11 @@ module.exports = {
     },
     {
       name: "@electron-forge/maker-deb",
-      config: {},
+      config: {
+        options: {
+          icon: path.resolve(__dirname, "./images/icon.png"),
+        },
+      },
     },
     // {
     //   name: "@electron-forge/maker-rpm",
@@ -69,12 +74,12 @@ module.exports = {
       );
       const clientDeb = path.resolve(
         outDir,
-        "make/deb/x64/client_1.0.0_amd64.deb"
+        `make/deb/x64/${package.productName}_${package.version}_amd64.deb`
       );
       shell.rm("-rf", combineDir);
       shell.mkdir("-p", combineDir);
       shell.cp(installFile, path.resolve(combineDir, "install.sh"));
-      shell.cp(sunshineDeb, path.resolve(combineDir, "Sunshine.deb"));
+      shell.cp(sunshineDeb, path.resolve(combineDir, "Streamer.deb"));
       shell.cp(clientDeb, path.resolve(combineDir, "Client.deb"));
       shell.chmod("a+x", path.resolve(combineDir, "install.sh"));
 

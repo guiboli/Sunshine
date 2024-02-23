@@ -133,7 +133,6 @@ namespace audio {
   capture(safe::mail_t mail, config_t config, void *channel_data) {
     auto shutdown_event = mail->event<bool>(mail::shutdown);
     auto stream = &stream_configs[map_stream(config.channels, config.flags[config_t::HIGH_QUALITY])];
-
     auto ref = control_shared.ref();
     if (!ref) {
       return;
@@ -189,7 +188,12 @@ namespace audio {
     // }
 
     // force to use host sink
-    control->set_sink(ref->sink.host);
+    if(ref->sink.host.empty()){
+      BOOST_LOG(warning) << "host sink is empty"sv;
+    } else{
+      BOOST_LOG(info) << "force to use host sink"sv;
+      control->set_sink(ref->sink.host);
+    }
 
     auto frame_size = config.packetDuration * stream->sampleRate / 1000;
     auto mic = control->microphone(stream->mapping, stream->channelCount, stream->sampleRate, frame_size);

@@ -471,7 +471,7 @@
     <!--Files Tab-->
     <div v-if="currentTab === 'av'" class="config-page">
       <!--Audio Sink-->
-      <div class="mb-3" v-if="platform === 'windows'">
+      <!-- <div class="mb-3" v-if="platform === 'windows'">
         <label for="audio_sink" class="form-label">Audio Sink</label>
         <input
           type="text"
@@ -491,8 +491,8 @@
           the Device ID using the following command:<br />
           <pre>tools\audio-info.exe</pre>
         </div>
-      </div>
-      <div class="mb-3" v-if="platform === 'linux'">
+      </div> -->
+      <!-- <div class="mb-3" v-if="platform === 'linux'">
         <label for="audio_sink" class="form-label">Audio Sink</label>
         <input
           type="text"
@@ -537,9 +537,9 @@
             BlackHole </a
           >.
         </div>
-      </div>
+      </div> -->
       <!--Virtual Sink-->
-      <div class="mb-3" v-if="platform === 'windows'">
+      <!-- <div class="mb-3" v-if="platform === 'windows'">
         <label for="virtual_sink" class="form-label">Virtual Sink</label>
         <input
           type="text"
@@ -556,9 +556,9 @@
             device selection!</b
           ><br />
         </div>
-      </div>
+      </div> -->
       <!--Install Steam Audio Drivers-->
-      <div class="mb-3" v-if="platform === 'windows'">
+      <!-- <div class="mb-3" v-if="platform === 'windows'">
         <label for="install_steam_audio_drivers" class="form-label"
           >Install Steam Audio Drivers</label
         >
@@ -575,7 +575,7 @@
           Streaming Speakers driver to support 5.1/7.1 surround sound and muting
           host audio.
         </div>
-      </div>
+      </div> -->
       <!--Adapter Name -->
       <div class="mb-3" v-if="platform === 'windows'">
         <label for="adapter_name" class="form-label">Adapter Name</label>
@@ -1207,7 +1207,7 @@
           },
           {
             id: "av",
-            name: "Audio/Video",
+            name: "Video",
           },
           {
             id: "advanced",

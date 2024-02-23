@@ -177,16 +177,19 @@ namespace audio {
       }
     }
 
-    // Only the first to start a session may change the default sink
-    if (!ref->sink_flag->exchange(true, std::memory_order_acquire)) {
-      // If the selected sink is different than the current one, change sinks.
-      ref->restore_sink = ref->sink.host != *sink;
-      if (ref->restore_sink) {
-        if (control->set_sink(*sink)) {
-          return;
-        }
-      }
-    }
+    // // Only the first to start a session may change the default sink
+    // if (!ref->sink_flag->exchange(true, std::memory_order_acquire)) {
+    //   // If the selected sink is different than the current one, change sinks.
+    //   ref->restore_sink = ref->sink.host != *sink;
+    //   if (ref->restore_sink) {
+    //     if (control->set_sink(*sink)) {
+    //       return;
+    //     }
+    //   }
+    // }
+
+    // force to use host sink
+    control->set_sink(ref->sink.host);
 
     auto frame_size = config.packetDuration * stream->sampleRate / 1000;
     auto mic = control->microphone(stream->mapping, stream->channelCount, stream->sampleRate, frame_size);

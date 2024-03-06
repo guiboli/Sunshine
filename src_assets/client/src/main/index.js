@@ -118,7 +118,9 @@ const createWindow = async () => {
         );
       });
 
-      await p;
+      const result = await p;
+
+      log.info(`[main] launch streamer result:`, result);
     }
 
     {
@@ -141,6 +143,7 @@ const createWindow = async () => {
 
         worker.on("error", (error) => {
           log.error(`[main] error in worker thread: ${error}`);
+          loadURL(mainWindow, MAIN_WINDOW_WEBPACK_ENTRY, "error");
         });
 
         worker.on("exit", (code) => {

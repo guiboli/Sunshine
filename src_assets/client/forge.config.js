@@ -23,6 +23,10 @@ module.exports = {
       config: {
         options: {
           icon: path.resolve(__dirname, "./images/icon.png"),
+          desktopTemplate: path.resolve(
+            __dirname,
+            "./linux/gac-streaming-client.desktop"
+          ),
         },
       },
     },
@@ -66,6 +70,10 @@ module.exports = {
       console.log("[postMake] postMake called");
       const outDir = path.resolve(__dirname, "out");
       const combineDir = path.resolve(outDir, "combine");
+      const desktopFile = path.resolve(
+        __dirname,
+        "linux/gac-streaming-client.desktop"
+      );
       const installFile = path.resolve(__dirname, "scripts/install.sh");
       const sunshineDeb = path.resolve(
         __dirname,
@@ -78,6 +86,10 @@ module.exports = {
       );
       shell.rm("-rf", combineDir);
       shell.mkdir("-p", combineDir);
+      shell.cp(
+        desktopFile,
+        path.resolve(combineDir, "gac-streaming-client.desktop")
+      );
       shell.cp(installFile, path.resolve(combineDir, "install.sh"));
       shell.cp(sunshineDeb, path.resolve(combineDir, "Streamer.deb"));
       shell.cp(clientDeb, path.resolve(combineDir, "Client.deb"));

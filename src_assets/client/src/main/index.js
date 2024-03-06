@@ -1,15 +1,45 @@
-import log from "electron-log/main";
 import path from "path";
-
+import { Worker } from "worker_threads";
+import log from "electron-log/main";
 const { app, BrowserWindow, ipcMain } = require("electron");
-
 const { exec, execSync } = require("node:child_process");
 const { checkIsRunning, checkIsDev, delay, loadURL } = require("./utils/utils");
 const { EventNamesMap, SunshineHttpAddress } = require("./constants/constant");
-import { Worker } from "worker_threads";
+
+log.initialize({ preload: true });
+
+const setWifiOn = async () => {
+  const p = new Promise((r, rj) => {
+    const cmd0 = `nmcli radio wifi on`;
+    exec(cmd0, (error, stdout, stderr) => {
+      log.info(`[setWifiOn] (no sudo) stdout: ${stdout}`);
+      if (stderr != "") {
+        log.error(`[setWifiOn] (no sudo) stderr: ${stderr}`);
+        const cmd1 = `sudo nmcli radio wifi on`;
+        exec(cmd1, (error, stdout, stderr) => {
+          log.info(`[setWifiOn] (try sudo) stdout: ${stdout}`);
+          if (stderr != "") {
+            log.error(`[setWifiOn] (try sudo) stderr: ${stderr}`);
+
+            r(false);
+
+            return;
+          }
+
+          r(true);
+        });
+
+        return;
+      }
+
+      r(true);
+    });
+  });
+
+  return p;
+};
 
 let mainWindow = null;
-log.initialize({ preload: true });
 app.commandLine.appendSwitch("ignore-certificate-errors");
 let isSingleInstance = app.requestSingleInstanceLock();
 log.info(`[main] isSingleInstance:`, isSingleInstance);
@@ -30,6 +60,7 @@ ipcMain.on("relaunch", (evt, arg) => {
 let sunshinePid = "";
 const createWindow = async () => {
   log.info(`[main] createWindow called`);
+  setWifiOn();
   if (mainWindow) {
     return;
   }

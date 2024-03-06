@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=gac-streaming-client
+GenericName=gac-streaming-client
+Exec=/usr/bin/gac-streaming-client %U
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=10

@@ -1,0 +1,14 @@
+[Unit]
+Description=DM USB Tethering
+After=network.service
+
+[Service]
+Type=simple
+RemainAfterExit=true
+ExecStart=/home/dm/work/rndis.sh
+TimeoutStartSec=infinity
+Restart=always
+StartLimitBurst=0
+
+[Install]
+WantedBy=default.target

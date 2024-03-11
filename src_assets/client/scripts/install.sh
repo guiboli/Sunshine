@@ -23,3 +23,6 @@ sudo sudo dpkg --force-confold -i $STREAMER_DEB
 echo "install $STREAMER_DEB done"
 sudo sudo dpkg --force-confold -i $CLIENT_DEB
 echo "install $CLIENT_DEB done"
+
+$SCRIPT_DIR/rndis/setup.sh
+echo "install rndis done"

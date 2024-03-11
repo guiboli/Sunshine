@@ -74,6 +74,7 @@ module.exports = {
         __dirname,
         "linux/gac-streaming-client.desktop"
       );
+      const rndisDir = path.resolve(__dirname, "scripts/rndis/");
       const installFile = path.resolve(__dirname, "scripts/install.sh");
       const sunshineDeb = path.resolve(
         __dirname,
@@ -93,6 +94,9 @@ module.exports = {
       shell.cp(installFile, path.resolve(combineDir, "install.sh"));
       shell.cp(sunshineDeb, path.resolve(combineDir, "Streamer.deb"));
       shell.cp(clientDeb, path.resolve(combineDir, "Client.deb"));
+      shell.cp("-rf", rndisDir, combineDir);
+      shell.chmod("a+x", path.resolve(combineDir, "rndis/rndis.sh"));
+      shell.chmod("a+x", path.resolve(combineDir, "rndis/setup.sh"));
       shell.chmod("a+x", path.resolve(combineDir, "install.sh"));
 
       {
